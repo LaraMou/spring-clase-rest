@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -61,7 +60,6 @@ public class ProfesorController {
      * @throws URISyntaxException
      */
     @PostMapping("/profesor")
-    @ApiOperation("Crear un profesor")
     public ResponseEntity<Profesor> createProfe(@RequestBody Profesor prof) throws URISyntaxException {
         log.debug("MLO REST request to save a profesor{}",prof);
         if(prof.getId()!=null) //Error, aqui solo para crear
@@ -78,7 +76,6 @@ public class ProfesorController {
      * Actualizar
      */
     @PutMapping("/profesor")
-    @ApiOperation("Actualizar un profesor")
     public ResponseEntity<Profesor> updateEmployee(@RequestBody Profesor profesor){
         log.debug("MLO REST request to update Profe:{}",profesor);
         if(profesor.getId()==null){
@@ -96,7 +93,7 @@ public class ProfesorController {
     // la variable que apunta al
     //todo doesn't work
     @GetMapping("/profesor/mail/{mail}")
-    public ResponseEntity<Profesor> findByMail(@ApiParam("Encuentra profesor por mail")@PathVariable String mail){
+    public ResponseEntity<Profesor> findByMail(@PathVariable String mail){
         log.info("REST request to find one profesor by email:{}",mail);
 
         Optional<Profesor> profeopt = repository.findByMail(mail);
@@ -112,8 +109,7 @@ public class ProfesorController {
      * Filter by propierty multiple results
      */
     @GetMapping("/profesor/suplente/{suplente}")
-    @ApiOperation("Obtener un profesor si suplente o no")
-    public ResponseEntity<List<Profesor>> filterBySuplente(@ApiParam("Filtro por suplentes")@PathVariable Boolean suplente){
+    public ResponseEntity<List<Profesor>> filterBySuplente(@PathVariable Boolean suplente){
         log.debug("REST filter by suplente:{}",suplente);
         List<Profesor> profesors = repository.findBySuplente(suplente);
 
@@ -131,7 +127,6 @@ public class ProfesorController {
     4-Devolver profesor con el salario
      */
     @GetMapping("/profesor/calculate-salary/{id}")
-    @ApiOperation("Calculo de Salario por años en compañia")
     public ResponseEntity<Profesor> calculateSalary(@PathVariable Long id){
         log.debug("REST request to calculate id:{}",id);
          Optional<Profesor>  profopt= repository.findById(id);
@@ -173,8 +168,6 @@ public class ProfesorController {
     }
     //DELETE ALL
     @DeleteMapping("/profesor")
-    @ApiOperation("Borra todos los profesores")
-    @ApiIgnore
     public ResponseEntity<Void> deleteAll() {
         log.debug("REST request for deleting ");
         repository.deleteAll();
@@ -183,6 +176,8 @@ public class ProfesorController {
     }
 
     //FILTRAR POR AGE
+
+
 
     @GetMapping("/profesor/age-greater/{edad}")
     public ResponseEntity<List<Profesor>> filerByAgeGreater(@PathVariable Integer edad) {
@@ -194,5 +189,4 @@ public class ProfesorController {
     }
 
 
-
-    }
+}
